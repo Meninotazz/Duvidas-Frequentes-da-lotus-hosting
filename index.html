@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotus Hosts — Dúvidas Frequentes & Feedbacks</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Card de Título igual ao design da imagem */
+        .header-card {
+            background-color: #262626;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .header-card h1 {
+            font-size: 22px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* Formulário */
+        .form-section {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #38bdf8;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 12px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: #38bdf8;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: #059669;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #047857;
+        }
+
+        /* Telão de Feedbacks estilo Google Play */
+        .feedbacks-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedbacks-wall {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Card individual do Feedback */
+        .feedback-card {
+            background: #262626;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .feedback-card:hover {
+            border-color: #38bdf8;
+        }
+
+        .feedback-user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: #f8fafc;
+        }
+
+        .stars {
+            color: #facc15;
+            font-size: 13px;
+        }
+
+        .feedback-text {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .feedback-date {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 8px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Cabeçalho (Estilo da sua foto) -->
+        <div class="header-card">
+            <h1>❓ Dúvidas Frequentes & Avaliações</h1>
+        </div>
+
+        <!-- Formulário de Envio -->
+        <div class="form-section">
+            <h2>Deixe sua Dúvida ou Feedback</h2>
+            <form id="feedbackForm">
+                <div class="input-group">
+                    <input type="text" id="userName" placeholder="Seu Nome ou Nick no Minecraft" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="userEmail" placeholder="Seu E-mail (para recebermos a resposta)" required>
+                </div>
+                <div class="input-group">
+                    <select id="userStars">
+                        <option value="5">⭐⭐⭐⭐⭐ (5/5 - Excelente)</option>
+                        <option value="4">⭐⭐⭐⭐ (4/5 - Muito Bom)</option>
+                        <option value="3">⭐⭐⭐ (3/5 - Bom)</option>
+                        <option value="2">⭐⭐ (2/5 - Regular)</option>
+                        <option value="1">⭐ (1/5 - Ruim)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <textarea id="userComment" rows="3" placeholder="Escreva aqui sua dúvida ou avaliação sobre a Lotus Hosts..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Enviar para o Mural 🚀</button>
+            </form>
+        </div>
+
+        <!-- Telão Estilo Google Play -->
+        <div class="feedbacks-header">
+            <span>💬 Avaliações da Comunidade</span>
+        </div>
+
+        <div class="feedbacks-wall" id="feedbacksWall">
+            <!-- Feedbacks Exemplo (Já aparecem ao carregar) -->
+            <div class="feedback-card">
+                <div class="feedback-user">
+                    <span class="user-name">Gabriel_Craft</span>
+                    <span class="stars">⭐⭐⭐⭐⭐</span>
+                </div>
+                <div class="feedback-text">O TPS ficou cravado em 20.0 mesmo com 15 amigos jogando com modpack! O NVMe faz toda a diferença.</div>
+                <div class="feedback-date">Enviado em 27/08/2026</div>
+            </div>
+
+            <div class="feedback-card">
+                <div class="feedback-user">
+                    <span class="user-name">Pedro H.</span>
+                    <span class="stars">⭐⭐⭐⭐⭐</span>
+                </div>
+                <div class="feedback-text">Como faço para instalar o PaperMC no Combo 2? O suporte pelo Discord me respondeu em menos de 5 minutos!</div>
+                <div class="feedback-date">Enviado em 27/08/2026</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para adicionar novas dúvidas/feedbacks no Telão -->
+    <script>
+        const form = document.getElementById('feedbackForm');
+        const wall = document.getElementById('feedbacksWall');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Pega os valores
+            const name = document.getElementById('userName').value;
+            const starsNum = document.getElementById('userStars').value;
+            const comment = document.getElementById('userComment').value;
+            const starsText = '⭐'.repeat(starsNum);
+
+            // Cria o novo card de feedback
+            const newCard = document.createElement('div');
+            newCard.className = 'feedback-card';
+            newCard.innerHTML = `
+                <div class="feedback-user">
+                    <span class="user-name">${name}</span>
+                    <span class="stars">${starsText}</span>
+                </div>
+                <div class="feedback-text">${comment}</div>
+                <div class="feedback-date">Enviado agora</div>
+            `;
+
+            // Adiciona no topo do telão
+            wall.prepend(newCard);
+
+            // Limpa o formulário
+            form.reset();
+            alert('Sua dúvida/feedback foi publicado no mural da Lotus Hosts!');
+        });
+    </script>
+</body>
+</html>
