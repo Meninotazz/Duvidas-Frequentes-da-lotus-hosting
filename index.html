@@ -145,12 +145,11 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
-            max-height: 380px;
+            max-height: 480px;
             overflow-y: auto;
             padding-right: 5px;
         }
 
-        /* Scrollbar Personalizada */
         .feedbacks-wall::-webkit-scrollbar {
             width: 6px;
         }
@@ -221,11 +220,94 @@
             border-left: 3px solid #22c55e;
         }
 
+        .feedback-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .btn-toggle-comments {
+            background: none;
+            border: none;
+            color: #38bdf8;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-toggle-comments:hover {
+            text-decoration: underline;
+        }
+
         .feedback-date {
             font-size: 10px;
             color: #64748b;
-            margin-top: 8px;
-            text-align: right;
+        }
+
+        /* SEÇÃO DE COMENTÁRIOS DENTRO DO CARD */
+        .comments-section {
+            display: none;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed #334155;
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .comment-item {
+            background: #1e293b;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .comment-author {
+            color: #22c55e;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 6px;
+        }
+
+        .comment-input-name {
+            width: 30%;
+            padding: 6px 8px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 11px;
+        }
+
+        .comment-input-text {
+            flex: 1;
+            padding: 6px 8px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 11px;
+        }
+
+        .btn-send-comment {
+            padding: 6px 12px;
+            background: #22c55e;
+            border: none;
+            border-radius: 6px;
+            color: #0f172a;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: pointer;
         }
 
         .status-msg {
@@ -253,7 +335,7 @@
             <h1>Lotus Hosts — Central de Avaliações</h1>
         </div>
 
-        <!-- Formulário -->
+        <!-- Formulário principal -->
         <div class="form-section">
             <h2>💬 Envie sua Dúvida ou Avaliação</h2>
             
@@ -309,7 +391,22 @@
                 <div class="feedback-text">
                     O TPS ficou cravado em 20.0 mesmo com 15 amigos jogando com modpack! O armazenamento NVMe faz toda a diferença.
                 </div>
-                <div class="feedback-date">Enviado em 27/08/2026</div>
+                <div class="feedback-footer">
+                    <button class="btn-toggle-comments" onclick="toggleComments(this)">💬 Comentários (<span class="comment-count">1</span>)</button>
+                    <div class="feedback-date">Enviado em 27/08/2026</div>
+                </div>
+                <div class="comments-section">
+                    <div class="comments-list">
+                        <div class="comment-item">
+                            <span class="comment-author">Suporte Lotus:</span> Ficamos super felizes que curtiu a performance! 🚀
+                        </div>
+                    </div>
+                    <form class="comment-form" onsubmit="addComment(event, this, 'Gabriel_Craft')">
+                        <input type="text" class="comment-input-name" placeholder="Seu Nick" required>
+                        <input type="text" class="comment-input-text" placeholder="Escreva um comentário..." required>
+                        <button type="submit" class="btn-send-comment">Responder</button>
+                    </form>
+                </div>
             </div>
 
             <!-- Card Exemplo 2 -->
@@ -324,21 +421,32 @@
                 <div class="feedback-text">
                     Suporte sensacional! Me ajudaram a configurar os plugins pelo Discord em menos de 5 minutos.
                 </div>
-                <div class="feedback-date">Enviado em 27/08/2026</div>
+                <div class="feedback-footer">
+                    <button class="btn-toggle-comments" onclick="toggleComments(this)">💬 Comentários (<span class="comment-count">0</span>)</button>
+                    <div class="feedback-date">Enviado em 27/08/2026</div>
+                </div>
+                <div class="comments-section">
+                    <div class="comments-list"></div>
+                    <form class="comment-form" onsubmit="addComment(event, this, 'Pedro H.')">
+                        <input type="text" class="comment-input-name" placeholder="Seu Nick" required>
+                        <input type="text" class="comment-input-text" placeholder="Escreva um comentário..." required>
+                        <button type="submit" class="btn-send-comment">Responder</button>
+                    </form>
+                </div>
             </div>
 
         </div>
     </div>
 
     <script>
-        // COLE A URL DO SEU WEBHOOK DO DISCORD ABAIXO ENTRE AS ASPAS:
-        const DISCORD_WEBHOOK_URL = "";
+        const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1547656507133399142/QnUmeDZCnD0s6rvlr5XN2bHCIsFo0nJ_u36bf686DpWYvH_UeSA3B1xJ1zfzWyq-30dJ";
 
         const form = document.getElementById('feedbackForm');
         const wall = document.getElementById('feedbacksWall');
         const statusMsg = document.getElementById('statusMsg');
         const btnSubmit = document.getElementById('btnSubmit');
 
+        // Enviar Novo Feedback
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -351,7 +459,6 @@
             const comment = document.getElementById('userComment').value;
             const starsText = '⭐'.repeat(starsNum);
 
-            // 1. ENVIA O FEEDBACK PARA O DISCORD VIA WEBHOOK
             if (DISCORD_WEBHOOK_URL !== "") {
                 fetch(DISCORD_WEBHOOK_URL, {
                     method: 'POST',
@@ -359,7 +466,7 @@
                     body: JSON.stringify({
                         embeds: [{
                             title: "📥 Novo Feedback / Dúvida Recebido!",
-                            color: 2278750, // Cor Verde Neon
+                            color: 2278750,
                             fields: [
                                 { name: "👤 Cliente / Nick:", value: name, inline: true },
                                 { name: "✉️ E-mail:", value: email, inline: true },
@@ -370,10 +477,9 @@
                             timestamp: new Date()
                         }]
                     })
-                }).catch(err => console.error("Erro ao enviar para o Discord:", err));
+                }).catch(err => console.error("Erro no Discord:", err));
             }
 
-            // 2. ADICIONA O CARD VISUALMENTE NO MURAL
             const newCard = document.createElement('div');
             newCard.className = 'feedback-card';
             newCard.innerHTML = `
@@ -385,21 +491,81 @@
                     </div>
                 </div>
                 <div class="feedback-text">${comment}</div>
-                <div class="feedback-date">Enviado agora</div>
+                <div class="feedback-footer">
+                    <button class="btn-toggle-comments" onclick="toggleComments(this)">💬 Comentários (<span class="comment-count">0</span>)</button>
+                    <div class="feedback-date">Enviado agora</div>
+                </div>
+                <div class="comments-section">
+                    <div class="comments-list"></div>
+                    <form class="comment-form" onsubmit="addComment(event, this, '${name}')">
+                        <input type="text" class="comment-input-name" placeholder="Seu Nick" required>
+                        <input type="text" class="comment-input-text" placeholder="Escreva um comentário..." required>
+                        <button type="submit" class="btn-send-comment">Responder</button>
+                    </form>
+                </div>
             `;
 
             wall.prepend(newCard);
 
-            // 3. CONFIRMAÇÃO
             statusMsg.style.display = "block";
             form.reset();
             btnSubmit.disabled = false;
             btnSubmit.innerHTML = "<span>Publicar Feedback</span> 🚀";
 
-            setTimeout(() => {
-                statusMsg.style.display = "none";
-            }, 5000);
+            setTimeout(() => { statusMsg.style.display = "none"; }, 5000);
         });
+
+        // Abrir/Fechar Comentários
+        function toggleComments(btn) {
+            const card = btn.closest('.feedback-card');
+            const section = card.querySelector('.comments-section');
+            section.style.display = section.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Adicionar novo comentário ao Card
+        function addComment(e, formElement, originalAuthor) {
+            e.preventDefault();
+            const nameInput = formElement.querySelector('.comment-input-name');
+            const textInput = formElement.querySelector('.comment-input-text');
+            const card = formElement.closest('.feedback-card');
+            const list = card.querySelector('.comments-list');
+            const countSpan = card.querySelector('.comment-count');
+
+            const author = nameInput.value;
+            const text = textInput.value;
+
+            // Insere na lista visual
+            const commentItem = document.createElement('div');
+            commentItem.className = 'comment-item';
+            commentItem.innerHTML = `<span class="comment-author">${author}:</span> ${text}`;
+            list.appendChild(commentItem);
+
+            // Atualiza o contador
+            countSpan.textContent = parseInt(countSpan.textContent) + 1;
+
+            // Notifica no Discord sobre a resposta
+            if (DISCORD_WEBHOOK_URL !== "") {
+                fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "💬 Novo Comentário em um Feedback!",
+                            color: 3717080, // Cor Azul
+                            fields: [
+                                { name: "👤 Comentado por:", value: author, inline: true },
+                                { name: "📌 No Feedback de:", value: originalAuthor, inline: true },
+                                { name: "💬 Resposta/Comentário:", value: text, inline: false }
+                            ],
+                            footer: { text: "Lotus Hosts — Comentários" },
+                            timestamp: new Date()
+                        }]
+                    })
+                }).catch(err => console.error("Erro no Discord:", err));
+            }
+
+            textInput.value = '';
+        }
     </script>
 </body>
 </html>
