@@ -439,7 +439,7 @@
     </div>
 
     <script>
-        const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1547656507133399142/QnUmeDZCnD0s6rvlr5XN2bHCIsFo0nJ_u36bf686DpWYvH_UeSA3B1xJ1zfzWyq-30dJ";
+        const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1548756804693925998/0JgI3z1j_WFeDrCNtjjXkIkErQ1BqsjjCDYkz3uwajs3IgFHGa842VRFvKVfbZXi3_7i";
 
         const form = document.getElementById('feedbackForm');
         const wall = document.getElementById('feedbacksWall');
@@ -459,7 +459,7 @@
             const comment = document.getElementById('userComment').value;
             const starsText = '⭐'.repeat(starsNum);
 
-            if (DISCORD_WEBHOOK_URL !== "https://discordapp.com/api/webhooks/1548756804693925998/0JgI3z1j_WFeDrCNtjjXkIkErQ1BqsjjCDYkz3uwajs3IgFHGa842VRFvKVfbZXi3_7i") {
+            if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL !== "") {
                 fetch(DISCORD_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -544,7 +544,7 @@
             countSpan.textContent = parseInt(countSpan.textContent) + 1;
 
             // Notifica no Discord sobre a resposta
-            if (DISCORD_WEBHOOK_URL !== "https://discordapp.com/api/webhooks/1548756804693925998/0JgI3z1j_WFeDrCNtjjXkIkErQ1BqsjjCDYkz3uwajs3IgFHGa842VRFvKVfbZXi3_7i") {
+            if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL !== "") {
                 fetch(DISCORD_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
